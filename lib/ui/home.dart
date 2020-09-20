@@ -1,3 +1,4 @@
+import 'package:fl_fire_auth/utils/auth_helper.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,7 +15,9 @@ class HomePage extends StatelessWidget {
             Text("Home page"),
             RaisedButton(
               child: Text("Log out"),
-              onPressed: () {},
+              onPressed: () {
+                AuthHelper.logOut();
+              },
             )
           ],
         ),

@@ -1,3 +1,4 @@
+import 'package:fl_fire_auth/utils/auth_helper.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -53,6 +54,14 @@ class _LoginPageState extends State<LoginPage> {
                       _passwordController.text.isEmpty) {
                     print("Email and password cannot be empty");
                     return;
+                  }
+                  try {
+                    final user = await AuthHelper.signInWithEmail(email: _emailController.text, password: _passwordController.text);
+                    if(user != null) {
+                      print("login successful");
+                    }
+                  }catch(e) {
+                    print(e);
                   }
                 },
               )
