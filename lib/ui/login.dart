@@ -34,7 +34,13 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20.0),
               RaisedButton(
                 child: Text("Login with Google"),
-                onPressed: () async {},
+                onPressed: () async {
+                  try {
+                    await AuthHelper.signInWithGoogle();
+                  } catch (e) {
+                    print(e);
+                  }
+                },
               ),
               TextField(
                 controller: _emailController,
@@ -56,11 +62,13 @@ class _LoginPageState extends State<LoginPage> {
                     return;
                   }
                   try {
-                    final user = await AuthHelper.signInWithEmail(email: _emailController.text, password: _passwordController.text);
-                    if(user != null) {
+                    final user = await AuthHelper.signInWithEmail(
+                        email: _emailController.text,
+                        password: _passwordController.text);
+                    if (user != null) {
                       print("login successful");
                     }
-                  }catch(e) {
+                  } catch (e) {
                     print(e);
                   }
                 },
