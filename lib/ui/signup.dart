@@ -1,21 +1,22 @@
-import 'package:fl_fire_auth/ui/signup.dart';
 import 'package:fl_fire_auth/utils/auth_helper.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   TextEditingController _emailController;
   TextEditingController _passwordController;
+  TextEditingController _confirmPasswordController;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
+    _confirmPasswordController = TextEditingController(text: "");
   }
 
   @override
@@ -29,12 +30,12 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               const SizedBox(height: 100.0),
               Text(
-                "Login",
+                "Sign Up",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
               const SizedBox(height: 20.0),
               RaisedButton(
-                child: Text("Login with Google"),
+                child: Text("Continue with Google"),
                 onPressed: () async {
                   try {
                     await AuthHelper.signInWithGoogle();
@@ -54,34 +55,37 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(hintText: "Enter password"),
               ),
               const SizedBox(height: 10.0),
+              TextField(
+                controller: _confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(hintText: "Confirm password"),
+              ),
+              const SizedBox(height: 10.0),
               RaisedButton(
-                child: Text("Login"),
+                child: Text("Signup"),
                 onPressed: () async {
                   if (_emailController.text.isEmpty ||
                       _passwordController.text.isEmpty) {
                     print("Email and password cannot be empty");
                     return;
                   }
+                  if (_confirmPasswordController.text.isEmpty ||
+                      _passwordController.text !=
+                          _confirmPasswordController.text) {
+                    print("confirm password does not match");
+                    return;
+                  }
                   try {
-                    final user = await AuthHelper.signInWithEmail(
+                    final user = await AuthHelper.signupWithEmail(
                         email: _emailController.text,
                         password: _passwordController.text);
                     if (user != null) {
-                      print("login successful");
+                      print("signup successful");
+                      Navigator.pop(context);
                     }
                   } catch (e) {
                     print(e);
                   }
-                },
-              ),
-              RaisedButton(
-                child: Text("Create Account"),
-                onPressed: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => SignupPage(),
-                      ));
                 },
               )
             ],

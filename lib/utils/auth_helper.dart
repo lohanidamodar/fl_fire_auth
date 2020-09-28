@@ -16,6 +16,13 @@ class AuthHelper {
     return user;
   }
 
+  static signupWithEmail({String email, String password}) async {
+    final res = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    final User user = res.user;
+    return user;
+  }
+
   static signInWithGoogle() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
     final acc = await googleSignIn.signIn();
