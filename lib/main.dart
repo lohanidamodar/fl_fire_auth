@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fl_fire_auth/ui/admin_home.dart';
 import 'package:fl_fire_auth/ui/home.dart';
 import 'package:fl_fire_auth/ui/login.dart';
 import 'package:fl_fire_auth/utils/auth_helper.dart';
@@ -33,7 +35,24 @@ class MainScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if(snapshot.hasData && snapshot.data != null) {
           UserHelper.saveUser(snapshot.data);
-          return HomePage();
+          return StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance.collection("users").doc(snapshot.data.uid).snapshots() ,
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+              if(snapshot.hasData && snapshot.data != null) {
+                final userDoc = snapshot.data;
+                final user = userDoc.data();
+                if(user['role'] == 'admin') {
+                  return AdminHomePage();
+                }else{
+                  return HomePage();
+                }
+              }else{
+                return Material(
+                  child: Center(child: CircularProgressIndicator(),),
+                );
+              }
+            },
+          );
         }
         return LoginPage();
       }
