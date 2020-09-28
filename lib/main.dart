@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fl_fire_auth/ui/home.dart';
 import 'package:fl_fire_auth/ui/login.dart';
+import 'package:fl_fire_auth/utils/auth_helper.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -31,6 +32,7 @@ class MainScreen extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if(snapshot.hasData && snapshot.data != null) {
+          UserHelper.saveUser(snapshot.data);
           return HomePage();
         }
         return LoginPage();
